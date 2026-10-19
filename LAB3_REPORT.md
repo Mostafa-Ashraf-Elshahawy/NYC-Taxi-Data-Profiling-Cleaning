@@ -7,10 +7,10 @@
 ---
 
 ## 1. Cover
-- **Student Name**: [Your Full Name Here]
-- **Student ID**: [Your Student ID Here]
+- **Student Name**: mostafa ashraf oahmed
+- **Student ID**: 692300252
 - **Date**: October 19, 2026
-- **GitHub Repository Link**: [https://github.com/your-username/de-lab2](https://github.com/your-username/de-lab2)
+- **GitHub Repository Link**: [https://github.com/mostafaashraf/NYC-Taxi-Data-Profiling-Cleaning](https://github.com/mostafaashraf/NYC-Taxi-Data-Profiling-Cleaning)
 
 ---
 
