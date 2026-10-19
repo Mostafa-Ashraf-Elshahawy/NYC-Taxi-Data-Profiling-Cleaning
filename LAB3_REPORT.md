@@ -10,7 +10,7 @@
 - **Student Name**: [Your Full Name Here]
 - **Student ID**: [Your Student ID Here]
 - **Date**: October 19, 2026
-- **GitHub Repository**: [https://github.com/your-username/de-lab2](https://github.com/your-username/de-lab2)
+- **GitHub Repository Link**: [https://github.com/your-username/de-lab2](https://github.com/your-username/de-lab2)
 
 ---
 
@@ -20,7 +20,7 @@
 $$\text{Source (NYC TLC Storage)} \longrightarrow \text{Extract (Chunked HTTP Stream)} \longrightarrow \text{Transform (clean(df) Quality Rules)} \longrightarrow \text{Load (PostgreSQL)} \longrightarrow \text{Serve (pgAdmin / Analytics)}$$
 
 ### Stage Explanations:
-1. **Source**: The raw NYC TLC Yellow Taxi trip data hosted as a gzip-compressed CSV (`yellow_tripdata_2021-01.csv.gz`) on remote GitHub storage.
+1. **Source**: The raw NYC TLC Yellow Taxi trip dataset hosted as a gzip-compressed CSV (`yellow_tripdata_2021-01.csv.gz`) on remote GitHub storage.
 2. **Extract**: Streaming the compressed dataset into memory in batches of 100,000 rows (`chunksize=100000`). This avoids loading all 1.37 million rows simultaneously, keeping RAM consumption constant and preventing Out-Of-Memory (OOM) fatal errors.
 3. **Transform**: Applying business data quality filters via `clean(df)`: dropping invalid dates, dropping non-positive fares and distances, fixing missing passenger counts, and stripping duplicate records.
 4. **Load**: Writing the sanitized chunks into a PostgreSQL table (`yellow_taxi_data`) via SQLAlchemy.
@@ -43,7 +43,12 @@ $$\text{Source (NYC TLC Storage)} \longrightarrow \text{Extract (Chunked HTTP St
 3. **`docker run --network=pipeline_default taxi_ingest:v001 ...`**: Executed the ingestion container inside the shared Docker network, downloading the dataset and ingesting **1,369,765 rows** into the `yellow_taxi_data` Postgres table.
 4. **Verification via pgAdmin**: Queried `SELECT count(1) FROM yellow_taxi_data;` which returned exactly `1,369,765`.
 
-*(Insert your in-class screenshots here showing the terminal prompt, `docker build`, `docker run`, and SQL row count)*
+> **[REQUIRED EVIDENCE - SCREENSHOTS TAKEN IN CLASS]**  
+> *(Insert your screenshot taken during class showing the command, its output, and your terminal prompt. Do not re-run class steps at home.)*  
+>  
+> `[PASTE IN-CLASS TERMINAL SCREENSHOT OF DOCKER COMPOSE UP HERE]`  
+> `[PASTE IN-CLASS TERMINAL SCREENSHOT OF DOCKER BUILD HERE]`  
+> `[PASTE IN-CLASS TERMINAL SCREENSHOT OF CONTAINER RUN & INGEST COUNT = 1,369,765 HERE]`  
 
 ---
 
@@ -51,7 +56,9 @@ $$\text{Source (NYC TLC Storage)} \longrightarrow \text{Extract (Chunked HTTP St
 
 The dataset was profiled in chunks of 100,000 rows across all **1,369,765 rows**.
 
-### Printed Profiling Table (`print(profile_df)`):
+### Evidence: Printed Profiling Table (`print(profile_df)`)
+*(Per Rule: Printed with print() and screenshotted from terminal / notebook)*
+
 ```text
                column          dtype  null_count null_pct             min_val             max_val
              VendorID          int64       98352    7.18%                   1                   2
@@ -74,7 +81,13 @@ improvement_surcharge        float64           0    0.00%                -0.3   
  congestion_surcharge        float64           0    0.00%                -2.5                 3.0
 ```
 
-### Printed Problems Table (`print(problems_df)`):
+> **[REQUIRED EVIDENCE - SCREENSHOT OF OUTPUT]**  
+> `[PASTE SCREENSHOT OF TERMINAL / JUPYTER OUTPUT OF print(profile_df) HERE]`
+
+---
+
+### Evidence: Printed Problems Table (`print(problems_df)`)
+
 ```text
                                             Problem  Count Pct_of_Total
                        Pickups outside January 2021     24       0.002%
@@ -85,6 +98,9 @@ Negative or zero trip distance (trip_distance <= 0)  19952       1.457%
                   Passenger count is NULL (missing)  98352       7.180%
                                Exact duplicate rows      0     0.00000%
 ```
+
+> **[REQUIRED EVIDENCE - SCREENSHOT OF OUTPUT]**  
+> `[PASTE SCREENSHOT OF TERMINAL / JUPYTER OUTPUT OF print(problems_df) HERE]`
 
 ### Analysis of Anomalies:
 1. **Bad Timestamps**: 24 records have pickup dates outside January 2021 (ranging from 2008 to late February 2021), caused by misconfigured taximeter clocks.
@@ -108,6 +124,14 @@ Negative or zero trip distance (trip_distance <= 0)  19952       1.457%
 ### The `clean(df)` Implementation:
 ```python
 def clean(df: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
+    """
+    Cleans the NYC yellow taxi DataFrame according to defined business rules.
+    
+    Requirements followed:
+    - Never drop rows silently (returns dict of rows removed per rule).
+    - Do not modify original dataframe (uses copy).
+    - Returns: (cleaned_df, rows_removed_dict)
+    """
     cleaned = df.copy()
     rows_removed = {}
     
@@ -135,7 +159,7 @@ def clean(df: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     cleaned = cleaned[cleaned['trip_distance'] > 0]
     rows_removed['rule_drop_invalid_distance'] = before - len(cleaned)
     
-    # 5. Fix passenger count
+    # 5. Fix passenger count (0 or null -> 1)
     p_zero = int((cleaned['passenger_count'] == 0).sum())
     p_null = int(cleaned['passenger_count'].isnull().sum())
     cleaned['passenger_count'] = cleaned['passenger_count'].fillna(1)
@@ -145,7 +169,7 @@ def clean(df: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     return cleaned, rows_removed
 ```
 
-### Full Dataset Cleaning Results:
+### Evidence: Full Dataset Cleaning Results Table:
 ```text
 ============================================================
 FULL DATASET CLEANING RESULTS (1,369,765 ROWS)
@@ -163,6 +187,9 @@ Retention Rate:      98.07%
         rule_drop_invalid_distance  18968     1.385%
 rule_fix_passenger_count_0_or_null 123259     8.999%
 ```
+
+> **[REQUIRED EVIDENCE - SCREENSHOT OF OUTPUT]**  
+> `[PASTE SCREENSHOT OF TERMINAL / JUPYTER OUTPUT OF {rule: rows_removed} AND SUMMARY HERE]`
 
 ---
 
@@ -211,3 +238,6 @@ dtype = {
 }
 ```
 This allowed missing values to be represented as `<NA>` without forcing integer columns to become floating-point numbers.
+
+> **[REQUIRED EVIDENCE - SCREENSHOT OF ERROR & FIX]**  
+> `[PASTE SCREENSHOT OF THE TERMINAL DTYPE WARNING / ERROR AND THE CODE FIX HERE]`
