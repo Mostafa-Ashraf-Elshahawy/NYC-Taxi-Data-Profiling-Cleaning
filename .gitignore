@@ -1,0 +1,23 @@
+# Virtual environment
+.venv/
+env/
+venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Data files (DO NOT PUSH TO GITHUB)
+*.csv
+*.csv.gz
+*.parquet
+*.json.gz
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Secrets / Keys
+*.env
+*.pem
+*.key
