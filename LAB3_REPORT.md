@@ -10,7 +10,7 @@
 - **Student Name**: mostafa ashraf oahmed
 - **Student ID**: 692300252
 - **Date**: October 19, 2026
-- **GitHub Repository Link**: [https://github.com/mostafaashraf/NYC-Taxi-Data-Profiling-Cleaning](https://github.com/mostafaashraf/NYC-Taxi-Data-Profiling-Cleaning)
+- **GitHub Repository Link**: [https://github.com/Mostafa-Ashraf-Elshahawy/NYC-Taxi-Data-Profiling-Cleaning](https://github.com/Mostafa-Ashraf-Elshahawy/NYC-Taxi-Data-Profiling-Cleaning)
 
 ---
 
