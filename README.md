@@ -11,11 +11,12 @@
 
 ## Repository Structure
 ```text
-├── README.md                 # Project overview and summary
-├── lab3_clean_nyc_taxi.ipynb  # Executed notebook (Steps 1–5 + verification)
-├── profile_and_clean.py      # Standalone Python script with clean(df)
-├── LAB3_REPORT.md            # Comprehensive assignment report
-└── .gitignore                # Excludes data files, .venv, and caches
+├── README.md                      # Project overview and summary
+├── lab3_clean_nyc_taxi.ipynb       # Executed notebook (Steps 1–5 + verification)
+├── Lab3_Report_Mostafa_Ashraf.pdf # 4-page submission report
+├── lab3_report_printable.html     # HTML source for the printable report
+├── LAB3_REPORT.md                 # Complete assignment report in markdown
+└── .gitignore                     # Excludes data files, .venv, and caches
 ```
 
 ---
@@ -40,11 +41,4 @@
 ---
 
 ## Usage
-
-### 1. Run the Standalone Script
-```bash
-python profile_and_clean.py
-```
-
-### 2. Run the Notebook in VS Code / Jupyter
-Open `lab3_clean_nyc_taxi.ipynb` to view the step-by-step code, profiling tables, and validation tests.
+Open and run `lab3_clean_nyc_taxi.ipynb` in VS Code or Jupyter to inspect the step-by-step code, profiling tables, and validation tests.
